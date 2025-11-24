@@ -1,0 +1,31 @@
+<resources>
+    <!-- App -->
+    <string name="app_name">AppSensores</string>
+
+    <!-- Labels y hints para Agregar/Editar Usuario -->
+    <string name="nombre">Nombre</string>
+    <string name="hint_nombre">Ingresa el nombre</string>
+    <string name="email">Email</string>
+    <string name="hint_email">Ingresa el email</string>
+    <string name="password">Contraseña</string>
+    <string name="hint_password">Ingresa la contraseña</string>
+    <string name="rol">Rol</string>
+    <string name="guardar">Guardar</string>
+
+    <!-- Botones y mensajes generales -->
+    <string name="agregar_usuario">Agregar Usuario</string>
+    <string name="editar_usuario">Editar Usuario</string>
+    <string name="estado_cambiado">Estado cambiado</string>
+    <string name="error_red">Error de red</string>
+    <string name="error_agregar">Error al agregar usuario</string>
+    <string name="error_actualizar">Error al actualizar usuario</string>
+    <string name="error_listar">Error al listar usuarios</string>
+    <string name="completa_campos">Completa todos los campos</string>
+
+    <!-- Array de roles -->
+    <string-array name="roles">
+        <item>ADMIN</item>
+        <item>OPERADOR</item>
+    </string-array>
+</resources>
+

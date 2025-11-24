@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RecuperarClave">
+
+    <!-- LOGO -->
+    <ImageView
+        android:id="@+id/image_logo"
+        android:layout_width="160dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/logoapp" />
+
+    <!-- TÍTULO -->
+    <TextView
+        android:id="@+id/txt_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Recuperar contraseña"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/image_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- EMAIL -->
+    <EditText
+        android:id="@+id/txt_email_recuperar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="32dp"
+        android:hint="Ingrese su email"
+        android:inputType="textEmailAddress"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/txt_titulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- BOTÓN ENVIAR RECUPERACIÓN -->
+    <Button
+        android:id="@+id/btn_enviar_recuperacion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="ENVIAR RECUPERACIÓN"
+        android:backgroundTint="#4CAF50"
+        app:layout_constraintTop_toBottomOf="@id/txt_email_recuperar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- CAMPO CÓDIGO -->
+    <EditText
+        android:id="@+id/txt_codigo_recuperar"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginHorizontal="32dp"
+        android:hint="Ingrese código verificador"
+        android:inputType="number"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/btn_enviar_recuperacion"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- BOTÓN VERIFICAR -->
+    <Button
+        android:id="@+id/btn_verificar_codigo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="VERIFICAR"
+        android:backgroundTint="#2196F3"
+        app:layout_constraintTop_toBottomOf="@id/txt_codigo_recuperar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
