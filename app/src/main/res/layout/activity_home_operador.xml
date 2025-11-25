@@ -38,27 +38,25 @@
         android:id="@+id/btn_ver_historial"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Actualizar Historial"
         android:backgroundTint="#2196F3"
+        android:text="ACTUALIZAR HISTORIAL"
         android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/txt_historial_titulo"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="8dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_historial_titulo" />
 
     <!-- Botón para abrir barrera (Llavero Digital) -->
     <Button
         android:id="@+id/btn_abrir_barrera_operador"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="🔓 Abrir Barrera"
         android:backgroundTint="#4CAF50"
+        android:text="ABRIR BARRERA"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/btn_ver_historial"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="12dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_ver_historial" />
 
     <!-- ListView para mostrar historial -->
     <ListView

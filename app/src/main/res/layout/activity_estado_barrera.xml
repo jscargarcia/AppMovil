@@ -40,14 +40,13 @@
         android:id="@+id/btn_actualizar_estado"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/actualizar_estado"
-        android:backgroundTint="#2196F3"
-        android:textColor="#FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/txt_estado_barrera"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp"/>
+        android:backgroundTint="#2196F3"
+        android:text="ACTUALIZAR ESTADO"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_estado_barrera" />
 
     <!-- Controles de barrera -->
     <LinearLayout
@@ -65,23 +64,23 @@
             android:id="@+id/btn_abrir_barrera_estado"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:text="@string/abrir_barrera"
             android:backgroundTint="#4CAF50"
+            android:text="ABRIR"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginEnd="8dp"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btn_cerrar_barrera_estado"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:text="@string/cerrar_barrera"
             android:backgroundTint="#F44336"
+            android:text="CERRAR"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginStart="8dp"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <!-- Nota informativa -->

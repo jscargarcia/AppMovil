@@ -3,13 +3,13 @@ package com.example.appsensores
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import cn.pedant.SweetAlert.SweetAlertDialog
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -31,7 +31,10 @@ class GestionUsuarios : AppCompatActivity() {
 
         // Validar que solo ADMIN pueda acceder
         if (rol != "ADMIN") {
-            Toast.makeText(this, "Acceso denegado: Solo administradores", Toast.LENGTH_LONG).show()
+            SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                .setTitleText("Acceso denegado")
+                .setContentText("Solo administradores")
+                .show()
             finish()
             return
         }
@@ -40,9 +43,7 @@ class GestionUsuarios : AppCompatActivity() {
         rvUsuarios.layoutManager = LinearLayoutManager(this)
         adapter = UsuariosAdapter(
             usuariosList,
-            onEditar = { usuario -> abrirEditarUsuario(usuario) },
-            onEliminar = { usuario -> cambiarEstadoUsuario(usuario.id, "INACTIVO") },
-            onActivar = { usuario -> cambiarEstadoUsuario(usuario.id, "ACTIVO") }
+            onEditar = { usuario -> abrirEditarUsuario(usuario) }
         )
         rvUsuarios.adapter = adapter
 
@@ -57,14 +58,15 @@ class GestionUsuarios : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        listarUsuarios() // refresca la lista automáticamente al volver de agregar/editar
+        listarUsuarios()
     }
 
     // -------------------- LISTAR USUARIOS --------------------
     private fun listarUsuarios() {
         val url = "http://35.168.148.150/listarUsuarios.php?id_departamento=$idDepartamento"
         val queue = Volley.newRequestQueue(this)
-        val request = StringRequest(Request.Method.GET, url,
+        val request = StringRequest(
+            Request.Method.GET, url,
             { response ->
                 usuariosList.clear()
                 val jsonArray = JSONArray(response)
@@ -81,8 +83,11 @@ class GestionUsuarios : AppCompatActivity() {
                 }
                 adapter.notifyDataSetChanged()
             },
-            { error ->
-                Toast.makeText(this, "Error al listar usuarios", Toast.LENGTH_SHORT).show()
+            {
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Error")
+                    .setContentText("Error al listar usuarios")
+                    .show()
             })
         queue.add(request)
     }
@@ -100,17 +105,30 @@ class GestionUsuarios : AppCompatActivity() {
         val url = "http://35.168.148.150/cambiarEstadoUsuario.php"
         val queue = Volley.newRequestQueue(this)
 
-        val stringRequest = object : StringRequest(Method.POST, url,
+        val stringRequest = object : StringRequest(
+            Method.POST, url,
             { response ->
                 val json = JSONObject(response)
                 if (json.getInt("estado") == 1) {
-                    Toast.makeText(this, "Estado cambiado", Toast.LENGTH_SHORT).show()
+                    SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Listo")
+                        .setContentText("Estado cambiado correctamente")
+                        .show()
                     listarUsuarios()
                 } else {
-                    Toast.makeText(this, "Error al cambiar estado", Toast.LENGTH_SHORT).show()
+                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error")
+                        .setContentText("No se pudo cambiar el estado")
+                        .show()
                 }
             },
-            { error -> Toast.makeText(this, "Error red", Toast.LENGTH_SHORT).show() }) {
+            {
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Error de red")
+                    .setContentText("No se pudo conectar al servidor")
+                    .show()
+            }
+        ) {
             override fun getParams(): MutableMap<String, String> {
                 return mutableMapOf(
                     "id_usuario" to id,

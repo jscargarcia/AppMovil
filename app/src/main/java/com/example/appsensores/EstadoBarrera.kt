@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import cn.pedant.SweetAlert.SweetAlertDialog
 import org.json.JSONObject
 
 class EstadoBarrera : AppCompatActivity() {
@@ -35,25 +35,19 @@ class EstadoBarrera : AppCompatActivity() {
             insets
         }
 
-        // Recibir datos
         idDepartamento = intent.getStringExtra("id_departamento") ?: ""
         idUsuario = intent.getStringExtra("id_usuario") ?: ""
 
-        // Vincular vistas
         txtEstadoBarrera = findViewById(R.id.txt_estado_barrera)
         btnActualizar = findViewById(R.id.btn_actualizar_estado)
         btnAbrir = findViewById(R.id.btn_abrir_barrera_estado)
         btnCerrar = findViewById(R.id.btn_cerrar_barrera_estado)
 
-        // Configurar listeners
         btnActualizar.setOnClickListener { consultarEstado() }
         btnAbrir.setOnClickListener { controlarBarrera("ABRIR") }
         btnCerrar.setOnClickListener { controlarBarrera("CERRAR") }
 
-        // Consultar estado inicial
         consultarEstado()
-
-        // Actualizar automáticamente cada 5 segundos
         iniciarActualizacionAutomatica()
     }
 
@@ -66,11 +60,17 @@ class EstadoBarrera : AppCompatActivity() {
                     val estado = json.getString("estado")
                     actualizarUI(estado)
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Error al procesar respuesta: ${e.message}", Toast.LENGTH_SHORT).show()
+                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error")
+                        .setContentText("Error al procesar respuesta: ${e.message}")
+                        .show()
                 }
             },
             { error ->
-                Toast.makeText(this, "Error al consultar estado: $error", Toast.LENGTH_SHORT).show()
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Error")
+                    .setContentText("Error al consultar estado: $error")
+                    .show()
             })
         Volley.newRequestQueue(this).add(request)
     }
@@ -78,12 +78,19 @@ class EstadoBarrera : AppCompatActivity() {
     private fun controlarBarrera(accion: String) {
         val url = "http://35.168.148.150/barrera.php?accion=$accion&id_usuario=$idUsuario&id_departamento=$idDepartamento"
         val request = StringRequest(Request.Method.GET, url,
-            { response ->
-                Toast.makeText(this, "Barrera: $accion", Toast.LENGTH_SHORT).show()
-                consultarEstado() // Actualizar estado después de la acción
+            { _ ->
+                SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText("Acción ejecutada")
+                    .setContentText("Barrera: $accion")
+                    .show()
+
+                consultarEstado()
             },
             { error ->
-                Toast.makeText(this, "Error al controlar barrera: $error", Toast.LENGTH_SHORT).show()
+                SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Error")
+                    .setContentText("Error al controlar barrera: $error")
+                    .show()
             })
         Volley.newRequestQueue(this).add(request)
     }
@@ -113,7 +120,7 @@ class EstadoBarrera : AppCompatActivity() {
         val runnable = object : Runnable {
             override fun run() {
                 consultarEstado()
-                handler.postDelayed(this, 5000) // Actualizar cada 5 segundos
+                handler.postDelayed(this, 5000)
             }
         }
         handler.post(runnable)
@@ -121,6 +128,6 @@ class EstadoBarrera : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacksAndMessages(null) // Detener actualizaciones al cerrar
+        handler.removeCallbacksAndMessages(null)
     }
 }

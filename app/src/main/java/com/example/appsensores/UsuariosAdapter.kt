@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 class UsuariosAdapter(
     private val usuarios: List<GestionUsuarios.Usuario>,
     private val onEditar: (GestionUsuarios.Usuario)->Unit,
-    private val onEliminar: (GestionUsuarios.Usuario)->Unit,
-    private val onActivar: (GestionUsuarios.Usuario)->Unit
 ) : RecyclerView.Adapter<UsuariosAdapter.UsuarioVH>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsuarioVH {
@@ -27,8 +25,6 @@ class UsuariosAdapter(
         holder.tvEstado.text = u.estado
 
         holder.btnEditar.setOnClickListener { onEditar(u) }
-        holder.btnEliminar.setOnClickListener { onEliminar(u) }
-        holder.btnActivar.setOnClickListener { onActivar(u) }
     }
 
     override fun getItemCount(): Int = usuarios.size
@@ -39,7 +35,5 @@ class UsuariosAdapter(
         val tvRol: TextView = itemView.findViewById(R.id.tvRol)
         val tvEstado: TextView = itemView.findViewById(R.id.tvEstado)
         val btnEditar: Button = itemView.findViewById(R.id.btnEditar)
-        val btnEliminar: Button = itemView.findViewById(R.id.btnEliminar)
-        val btnActivar: Button = itemView.findViewById(R.id.btnActivar)
     }
 }
