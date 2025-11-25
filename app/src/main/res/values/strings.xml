@@ -27,5 +27,13 @@
         <item>ADMIN</item>
         <item>OPERADOR</item>
     </string-array>
+
+    <!-- Estado Barrera -->
+    <string name="estado_barrera_titulo">Estado de la Barrera</string>
+    <string name="estado_consultando">Estado: Consultando…</string>
+    <string name="actualizar_estado">🔄 Actualizar Estado</string>
+    <string name="abrir_barrera">🔓 Abrir</string>
+    <string name="cerrar_barrera">🔒 Cerrar</string>
+    <string name="nota_actualizacion_automatica">ℹ️ El estado se actualiza automáticamente cada 5 segundos</string>
 </resources>
 

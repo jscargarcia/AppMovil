@@ -18,7 +18,7 @@ class RegistrarUsuario : AppCompatActivity() {
     private lateinit var txtConfirmar: EditText
     private lateinit var btnRegistrar: Button
 
-    private val URL_REGISTRO = "http://54.144.226.230/registrarUsuario.php"
+    private val URL_REGISTRO = "http://35.168.148.150/registrarUsuario.php"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

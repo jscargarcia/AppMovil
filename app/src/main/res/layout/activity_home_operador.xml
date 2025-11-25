@@ -8,13 +8,27 @@
 
     <!-- Título -->
     <TextView
+        android:id="@+id/txt_operador_titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Panel de Operador"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#4CAF50"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Título -->
+    <TextView
         android:id="@+id/txt_historial_titulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Historial de Accesos"
         android:textStyle="bold"
         android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_operador_titulo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="12dp"/>
@@ -30,6 +44,20 @@
         app:layout_constraintTop_toBottomOf="@id/txt_historial_titulo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Botón para abrir barrera (Llavero Digital) -->
+    <Button
+        android:id="@+id/btn_abrir_barrera_operador"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="🔓 Abrir Barrera"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/btn_ver_historial"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="12dp"/>
 
     <!-- ListView para mostrar historial -->
@@ -38,7 +66,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:dividerHeight="1dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_ver_historial"
+        app:layout_constraintTop_toBottomOf="@id/btn_abrir_barrera_operador"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

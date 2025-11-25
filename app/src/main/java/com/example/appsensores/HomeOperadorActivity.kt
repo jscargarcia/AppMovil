@@ -13,6 +13,7 @@ class HomeOperadorActivity : AppCompatActivity() {
 
     private lateinit var listViewHistorial: ListView
     private lateinit var btnVerHistorial: Button
+    private lateinit var btnAbrirBarrera: Button
 
     private var idDepartamento: String = ""
     private var idUsuario: String = ""
@@ -25,6 +26,7 @@ class HomeOperadorActivity : AppCompatActivity() {
         // Vincular vistas correctas
         listViewHistorial = findViewById(R.id.listViewHistorial)
         btnVerHistorial = findViewById(R.id.btn_ver_historial)
+        btnAbrirBarrera = findViewById(R.id.btn_abrir_barrera_operador)
 
         // Recibir datos de MainActivity
         intent.extras?.let {
@@ -37,10 +39,15 @@ class HomeOperadorActivity : AppCompatActivity() {
         btnVerHistorial.setOnClickListener {
             cargarHistorial()
         }
+
+        // Botón para abrir barrera (llavero digital)
+        btnAbrirBarrera.setOnClickListener {
+            abrirBarrera()
+        }
     }
 
     private fun cargarHistorial() {
-        val url = "http://54.144.226.230/listarEventos.php?rol=OPERADOR&id_usuario=$idUsuario&id_departamento=$idDepartamento"
+        val url = "http://35.168.148.150/listarEventos.php?rol=OPERADOR&id_usuario=$idUsuario&id_departamento=$idDepartamento"
         val request = StringRequest(Request.Method.GET, url,
             { response ->
                 try {
@@ -62,6 +69,19 @@ class HomeOperadorActivity : AppCompatActivity() {
                 }
             }, { error ->
                 Toast.makeText(this, "Error servidor: $error", Toast.LENGTH_LONG).show()
+            })
+        Volley.newRequestQueue(this).add(request)
+    }
+
+    private fun abrirBarrera() {
+        val url = "http://35.168.148.150/barrera.php?accion=ABRIR&id_usuario=$idUsuario&id_departamento=$idDepartamento"
+        val request = StringRequest(Request.Method.GET, url,
+            { response ->
+                Toast.makeText(this, "Barrera abierta correctamente", Toast.LENGTH_SHORT).show()
+                cargarHistorial() // Actualizar historial después de abrir
+            },
+            { error ->
+                Toast.makeText(this, "Error al abrir barrera: $error", Toast.LENGTH_LONG).show()
             })
         Volley.newRequestQueue(this).add(request)
     }

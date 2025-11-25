@@ -1,6 +1,8 @@
 package com.example.appsensores
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
@@ -13,6 +15,10 @@ class HomeAdminActivity : AppCompatActivity() {
 
     private lateinit var listViewEventos: ListView
     private lateinit var btnCargarHistorial: Button
+    private lateinit var btnIrGestionSensores: Button
+    private lateinit var btnIrGestionUsuarios: Button
+    private lateinit var btnIrEstadoBarrera: Button
+    private lateinit var btnIrHistorialCompleto: Button
     private lateinit var spinnerSensores: Spinner
     private lateinit var btnActivarSensor: Button
     private lateinit var btnDesactivarSensor: Button
@@ -33,6 +39,10 @@ class HomeAdminActivity : AppCompatActivity() {
         // Vincular vistas
         listViewEventos = findViewById(R.id.listViewEventos)
         btnCargarHistorial = findViewById(R.id.btn_cargar_historial)
+        btnIrGestionSensores = findViewById(R.id.btn_ir_gestion_sensores)
+        btnIrGestionUsuarios = findViewById(R.id.btn_ir_gestion_usuarios)
+        btnIrEstadoBarrera = findViewById(R.id.btn_ir_estado_barrera)
+        btnIrHistorialCompleto = findViewById(R.id.btn_ir_historial_completo)
         spinnerSensores = findViewById(R.id.spinner_sensores)
         btnActivarSensor = findViewById(R.id.btn_activar_sensor)
         btnDesactivarSensor = findViewById(R.id.btn_desactivar_sensor)
@@ -49,7 +59,39 @@ class HomeAdminActivity : AppCompatActivity() {
             idDepartamento = it.getString("id_departamento", "")
         }
 
-        // Configurar listeners
+        // Configurar listeners de navegación
+        btnIrGestionSensores.setOnClickListener {
+            val intent = Intent(this, GestionSensores::class.java)
+            intent.putExtra("rol", rol)
+            intent.putExtra("id_usuario", idUsuario)
+            intent.putExtra("id_departamento", idDepartamento)
+            startActivity(intent)
+        }
+
+        btnIrGestionUsuarios.setOnClickListener {
+            val intent = Intent(this, GestionUsuarios::class.java)
+            intent.putExtra("rol", rol)
+            intent.putExtra("id_usuario", idUsuario)
+            intent.putExtra("id_departamento", idDepartamento)
+            startActivity(intent)
+        }
+
+        btnIrEstadoBarrera.setOnClickListener {
+            val intent = Intent(this, EstadoBarrera::class.java)
+            intent.putExtra("id_usuario", idUsuario)
+            intent.putExtra("id_departamento", idDepartamento)
+            startActivity(intent)
+        }
+
+        btnIrHistorialCompleto.setOnClickListener {
+            val intent = Intent(this, HistorialAccesos::class.java)
+            intent.putExtra("rol", rol)
+            intent.putExtra("id_usuario", idUsuario)
+            intent.putExtra("id_departamento", idDepartamento)
+            startActivity(intent)
+        }
+
+        // Configurar listeners de acciones
         btnCargarHistorial.setOnClickListener { cargarHistorial() }
         btnActivarSensor.setOnClickListener { cambiarEstadoSensor("ACTIVO") }
         btnDesactivarSensor.setOnClickListener { cambiarEstadoSensor("INACTIVO") }
@@ -64,7 +106,10 @@ class HomeAdminActivity : AppCompatActivity() {
     }
 
     private fun cargarHistorial() {
-        val url = "http://54.144.226.230/listarEventos.php?rol=$rol&id_usuario=$idUsuario&id_departamento=$idDepartamento"
+        val url = "http://35.168.148.150/listarEventos.php?rol=$rol&id_usuario=$idUsuario&id_departamento=$idDepartamento"
+        Log.d("HomeAdmin", "URL: $url")
+        Log.d("HomeAdmin", "Rol: $rol, ID Usuario: $idUsuario, ID Depto: $idDepartamento")
+        
         val request = StringRequest(Request.Method.GET, url,
             { response ->
                 try {
@@ -86,13 +131,21 @@ class HomeAdminActivity : AppCompatActivity() {
                 }
             },
             { error ->
-                Toast.makeText(this, "Error servidor: $error", Toast.LENGTH_LONG).show()
+                val errorMsg = when {
+                    error.networkResponse != null -> {
+                        val statusCode = error.networkResponse.statusCode
+                        val data = String(error.networkResponse.data)
+                        "Error $statusCode: $data"
+                    }
+                    else -> "Error de red: ${error.message}"
+                }
+                Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
             })
         Volley.newRequestQueue(this).add(request)
     }
 
     private fun cargarSensores() {
-        val url = "http://54.144.226.230/listarSensores.php?id_departamento=$idDepartamento"
+        val url = "http://35.168.148.150/listarSensores.php?id_departamento=$idDepartamento"
         val request = StringRequest(Request.Method.GET, url,
             { response ->
                 try {
@@ -119,7 +172,7 @@ class HomeAdminActivity : AppCompatActivity() {
     }
 
     private fun cargarUsuarios() {
-        val url = "http://54.144.226.230/listarUsuarios.php?id_departamento=$idDepartamento"
+        val url = "http://35.168.148.150/listarUsuarios.php?id_departamento=$idDepartamento"
         val request = StringRequest(Request.Method.GET, url,
             { response ->
                 try {
@@ -147,19 +200,50 @@ class HomeAdminActivity : AppCompatActivity() {
 
     private fun cambiarEstadoSensor(nuevoEstado: String) {
         val seleccionado = spinnerSensores.selectedItem?.toString()?.split(" - ")?.get(0) ?: return
-        val url = "http://54.144.226.230/actualizarEstadoSensor.php?id_sensor=$seleccionado&estado=$nuevoEstado"
+        val url = "http://35.168.148.150/actualizarEstadoSensor.php?id_sensor=$seleccionado&estado=$nuevoEstado"
+        Log.d("HomeAdmin", "URL Sensor: $url")
+        Log.d("HomeAdmin", "ID Sensor: $seleccionado, Nuevo Estado: $nuevoEstado")
+        
         val request = StringRequest(Request.Method.GET, url,
-            { _ ->
-                Toast.makeText(this, "Sensor actualizado", Toast.LENGTH_SHORT).show()
-                cargarSensores()
+            { response ->
+                Log.d("HomeAdmin", "Respuesta completa: $response")
+                try {
+                    val json = JSONObject(response)
+                    val estado = json.getInt("estado")
+                    val mensaje = json.getString("mensaje")
+                    
+                    if (estado == 1) {
+                        Toast.makeText(this, "Sensor actualizado: $mensaje", Toast.LENGTH_SHORT).show()
+                        // Esperar un momento antes de recargar
+                        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                            cargarSensores()
+                        }, 500)
+                    } else {
+                        Toast.makeText(this, "Error: $mensaje", Toast.LENGTH_LONG).show()
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Sensor actualizado", Toast.LENGTH_SHORT).show()
+                    cargarSensores()
+                }
             },
-            { error -> Toast.makeText(this, "Error servidor: $error", Toast.LENGTH_LONG).show() })
+            { error ->
+                val errorMsg = when {
+                    error.networkResponse != null -> {
+                        val statusCode = error.networkResponse.statusCode
+                        val data = String(error.networkResponse.data)
+                        "Error $statusCode: $data"
+                    }
+                    else -> "Error de red: ${error.message}"
+                }
+                Log.e("HomeAdmin", "Error cambiar estado sensor: $errorMsg")
+                Toast.makeText(this, errorMsg, Toast.LENGTH_LONG).show()
+            })
         Volley.newRequestQueue(this).add(request)
     }
 
     private fun cambiarEstadoUsuario(nuevoEstado: String) {
         val seleccionado = spinnerUsuarios.selectedItem?.toString()?.split(" - ")?.get(0) ?: return
-        val url = "http://54.144.226.230/cambiarEstadoUsuario.php?id_usuario=$seleccionado&estado=$nuevoEstado"
+        val url = "http://35.168.148.150/cambiarEstadoUsuario.php?id_usuario=$seleccionado&estado=$nuevoEstado"
         val request = StringRequest(Request.Method.GET, url,
             { _ ->
                 Toast.makeText(this, "Usuario actualizado", Toast.LENGTH_SHORT).show()
@@ -170,7 +254,7 @@ class HomeAdminActivity : AppCompatActivity() {
     }
 
     private fun controlarBarrera(accion: String) {
-        val url = "http://54.144.226.230/barrera.php?accion=$accion"
+        val url = "http://35.168.148.150/barrera.php?accion=$accion&id_usuario=$idUsuario&id_departamento=$idDepartamento"
         val request = StringRequest(Request.Method.GET, url,
             { _ ->
                 Toast.makeText(this, "Acción barrera: $accion", Toast.LENGTH_SHORT).show()

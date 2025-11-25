@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.android.volley.DefaultRetryPolicy
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONObject
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRegistrar: Button
     private lateinit var btnRecuperar: Button
 
-    private val URL_LOGIN = "http://54.144.226.230/login.php"
+    private val URL_LOGIN = "http://35.168.148.150/login.php"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,6 +102,13 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
+
+        // Aumentar timeout a 30 segundos
+        request.retryPolicy = DefaultRetryPolicy(
+            30000,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
 
         Volley.newRequestQueue(this).add(request)
     }

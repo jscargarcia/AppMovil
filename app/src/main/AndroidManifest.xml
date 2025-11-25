@@ -18,22 +18,13 @@
             android:name=".RegistrarUsuario"
             android:exported="false" />
         <activity
-            android:name=".AgregarEditarUsuario"
-            android:exported="false" />
-        <activity
-            android:name=".UsuariosAdapter"
+            android:name=".AgregarEditarUsuarioActivity"
             android:exported="false" />
         <activity
             android:name=".GestionUsuarios"
             android:exported="false" />
         <activity
             android:name=".RegistrarSensor"
-            android:exported="false" />
-        <activity
-            android:name=".SensorAdapter"
-            android:exported="false" />
-        <activity
-            android:name=".Sensor"
             android:exported="false" />
         <activity
             android:name=".HomeOperadorActivity"
@@ -52,9 +43,6 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
-        <activity
-            android:name=".RecuperarClave"
             android:exported="false" />
         <activity
             android:name=".Splash"

@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="12dp"
-    android:background="#EAEAEA">
+    android:background="#EAEAEA"
+    android:layout_marginBottom="8dp">
 
     <TextView
         android:id="@+id/txtCodigo"
@@ -25,15 +26,47 @@
         android:id="@+id/txtEstado"
         android:text="Estado:"
         android:layout_marginTop="4dp"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btnCambiar"
-        android:text="Cambiar Estado"
+    <!-- Botones de control -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/btnActivarDesactivar"
+            android:text="Activar"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="#4CAF50" />
+
+        <Button
+            android:id="@+id/btnMarcarPerdido"
+            android:text="Perdido"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="#FF9800" />
+
+        <Button
+            android:id="@+id/btnMarcarBloqueado"
+            android:text="Bloquear"
+            android:textSize="12sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#F44336" />
+    </LinearLayout>
 
 </LinearLayout>
 

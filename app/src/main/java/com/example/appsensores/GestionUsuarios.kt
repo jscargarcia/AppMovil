@@ -20,12 +20,21 @@ class GestionUsuarios : AppCompatActivity() {
     private var usuariosList = mutableListOf<Usuario>()
 
     private var idDepartamento = ""
+    private var rol = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gestion_usuarios)
 
         idDepartamento = intent.getStringExtra("id_departamento") ?: ""
+        rol = intent.getStringExtra("rol") ?: ""
+
+        // Validar que solo ADMIN pueda acceder
+        if (rol != "ADMIN") {
+            Toast.makeText(this, "Acceso denegado: Solo administradores", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
         rvUsuarios = findViewById(R.id.rvUsuarios)
         rvUsuarios.layoutManager = LinearLayoutManager(this)
@@ -53,7 +62,7 @@ class GestionUsuarios : AppCompatActivity() {
 
     // -------------------- LISTAR USUARIOS --------------------
     private fun listarUsuarios() {
-        val url = "https://54.144.226.230/listarUsuarios.php?id_departamento=$idDepartamento"
+        val url = "http://35.168.148.150/listarUsuarios.php?id_departamento=$idDepartamento"
         val queue = Volley.newRequestQueue(this)
         val request = StringRequest(Request.Method.GET, url,
             { response ->
@@ -88,7 +97,7 @@ class GestionUsuarios : AppCompatActivity() {
 
     // -------------------- ACTIVAR / DESACTIVAR --------------------
     private fun cambiarEstadoUsuario(id: String, estado: String) {
-        val url = "https://54.144.226.230/cambiarEstadoUsuario.php"
+        val url = "http://35.168.148.150/cambiarEstadoUsuario.php"
         val queue = Volley.newRequestQueue(this)
 
         val stringRequest = object : StringRequest(Method.POST, url,
