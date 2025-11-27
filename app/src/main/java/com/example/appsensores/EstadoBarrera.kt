@@ -29,6 +29,7 @@ class EstadoBarrera : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_estado_barrera)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -77,14 +78,29 @@ class EstadoBarrera : AppCompatActivity() {
 
     private fun controlarBarrera(accion: String) {
         val url = "http://35.168.148.150/barrera.php?accion=$accion&id_usuario=$idUsuario&id_departamento=$idDepartamento"
-        val request = StringRequest(Request.Method.GET, url,
-            { _ ->
-                SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                    .setTitleText("Acción ejecutada")
-                    .setContentText("Barrera: $accion")
-                    .show()
 
-                consultarEstado()
+        val request = StringRequest(Request.Method.GET, url,
+            { response ->
+                try {
+                    val json = JSONObject(response)
+                    if (json.getInt("estado") == 1) {
+                        SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                            .setTitleText("Acción ejecutada")
+                            .setContentText("Barrera: $accion")
+                            .show()
+                        consultarEstado()
+                    } else {
+                        SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                            .setTitleText("Error")
+                            .setContentText(json.getString("mensaje"))
+                            .show()
+                    }
+                } catch (e: Exception) {
+                    SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Error")
+                        .setContentText("Error al procesar respuesta: ${e.message}")
+                        .show()
+                }
             },
             { error ->
                 SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
@@ -92,6 +108,7 @@ class EstadoBarrera : AppCompatActivity() {
                     .setContentText("Error al controlar barrera: $error")
                     .show()
             })
+
         Volley.newRequestQueue(this).add(request)
     }
 
