@@ -28,8 +28,8 @@ try {
     // Determinar el nuevo estado
     $nuevoEstado = ($accion == 'ABRIR') ? 'ABIERTA' : 'CERRADA';
     
-    // Actualizar o insertar en la tabla barrera con procesado=0 (pendiente para Arduino)
-    $stmt = $conn->prepare("INSERT INTO barrera (id_departamento, estado, procesado, id_usuario, ultima_actualizacion)
+    // Actualizar o insertar en la tabla estado_barrera
+    $stmt = $conn->prepare("INSERT INTO estado_barrera (id_departamento, estado, procesado, id_usuario, ultima_actualizacion)
                             VALUES (:id_departamento, :estado, 0, :id_usuario, NOW())
                             ON DUPLICATE KEY UPDATE 
                             estado = :estado, 

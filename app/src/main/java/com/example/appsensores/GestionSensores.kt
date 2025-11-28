@@ -70,7 +70,8 @@ class GestionSensores : AppCompatActivity(), OnEstadoCambiadoListener {
                             obj.getString("id_sensor"),
                             obj.getString("codigo_sensor"),
                             obj.getString("estado"),
-                            obj.getString("tipo")
+                            obj.getString("tipo"),
+                            obj.optString("nombre_usuario", "Sin asignar")
                         )
                     )
                 }

@@ -28,6 +28,7 @@ class SensorAdapter(
         val txtCodigo = view.findViewById<TextView>(R.id.txtCodigo)
         val txtTipo = view.findViewById<TextView>(R.id.txtTipo)
         val txtEstado = view.findViewById<TextView>(R.id.txtEstado)
+        val txtUsuario = view.findViewById<TextView>(R.id.txtUsuario)
         val btnActivarDesactivar = view.findViewById<Button>(R.id.btnActivarDesactivar)
         val btnMarcarPerdido = view.findViewById<Button>(R.id.btnMarcarPerdido)
         val btnMarcarBloqueado = view.findViewById<Button>(R.id.btnMarcarBloqueado)
@@ -35,6 +36,7 @@ class SensorAdapter(
         txtCodigo.text = "Código: ${sensor.codigo_sensor}"
         txtTipo.text = "Tipo: ${sensor.tipo}"
         txtEstado.text = "Estado: ${sensor.estado}"
+        txtUsuario.text = "Usuario: ${sensor.nombre_usuario ?: "Sin asignar"}"
 
         // Colorear el estado según el valor
         when (sensor.estado) {

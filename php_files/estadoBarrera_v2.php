@@ -10,28 +10,26 @@ try {
     $conn = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
-    $id_departamento = $_GET['id_departamento'] ?? '';
+    $id_departamento = $_GET['id_departamento'] ?? 1;
     
-    if (empty($id_departamento)) {
-        echo json_encode(['estado'=>0,'mensaje'=>'Falta id_departamento', 'comando'=>'NADA']);
-        exit;
-    }
-
-    // Obtener el estado actual de la barrera desde tabla barrera
-    $stmt = $conn->prepare("SELECT estado, procesado FROM barrera WHERE id_departamento = :id_departamento");
+    // Obtener el estado actual de la barrera
+    $stmt = $conn->prepare("SELECT estado, procesado FROM estado_barrera 
+                            WHERE id_departamento = :id_departamento");
     $stmt->execute([':id_departamento' => $id_departamento]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($row) {
-        $estado = $row['estado'];
-        $procesado = $row['procesado'];
+    $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($resultado) {
+        $estado = $resultado['estado'];
+        $procesado = $resultado['procesado'];
         
-        // Si NO ha sido procesado (procesado=0), devolver el comando
+        // Si no ha sido procesado, devolver el comando
         if ($procesado == 0) {
             $comando = ($estado == 'ABIERTA') ? 'ABRIR' : 'CERRAR';
             
-            // Marcar como procesado para que Arduino no lo ejecute múltiples veces
-            $stmt = $conn->prepare("UPDATE barrera SET procesado = 1 WHERE id_departamento = :id_departamento");
+            // Marcar como procesado
+            $stmt = $conn->prepare("UPDATE estado_barrera 
+                                    SET procesado = 1 
+                                    WHERE id_departamento = :id_departamento");
             $stmt->execute([':id_departamento' => $id_departamento]);
             
             echo json_encode([
@@ -49,7 +47,8 @@ try {
         }
     } else {
         // No existe registro, crear uno por defecto
-        $stmt = $conn->prepare("INSERT INTO barrera (id_departamento, estado, procesado) VALUES (:id_departamento, 'CERRADA', 1)");
+        $stmt = $conn->prepare("INSERT INTO estado_barrera (id_departamento, estado, procesado) 
+                                VALUES (:id_departamento, 'CERRADA', 1)");
         $stmt->execute([':id_departamento' => $id_departamento]);
         
         echo json_encode([
@@ -60,6 +59,10 @@ try {
     }
     
 } catch(PDOException $e) {
-    echo json_encode(['error' => $e->getMessage(), 'estado' => 'DESCONOCIDO', 'comando' => 'NADA']);
+    echo json_encode([
+        'error' => $e->getMessage(), 
+        'estado' => 'DESCONOCIDO',
+        'comando' => 'NADA'
+    ]);
 }
 ?>

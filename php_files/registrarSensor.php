@@ -14,6 +14,7 @@ try {
     $tipo = $_GET['tipo'] ?? '';
     $estado = $_GET['estado'] ?? 'ACTIVO';
     $id_departamento = $_GET['id_departamento'] ?? '';
+    $id_usuario = $_GET['id_usuario'] ?? null;
     
     if (empty($codigo) || empty($tipo) || empty($id_departamento)) {
         echo json_encode(['estado' => 0, 'mensaje' => 'Faltan parámetros']);
@@ -35,14 +36,15 @@ try {
         exit;
     }
     
-    // Insertar nuevo sensor
-    $stmt = $conn->prepare("INSERT INTO sensores (codigo_sensor, tipo, estado, fecha_alta, id_departamento) 
-                            VALUES (:codigo, :tipo, :estado, NOW(), :id_departamento)");
+    // Insertar nuevo sensor con usuario asignado
+    $stmt = $conn->prepare("INSERT INTO sensores (codigo_sensor, tipo, estado, fecha_alta, id_departamento, id_usuario) 
+                            VALUES (:codigo, :tipo, :estado, NOW(), :id_departamento, :id_usuario)");
     $stmt->execute([
         ':codigo' => $codigo,
         ':tipo' => $tipo,
         ':estado' => $estado,
-        ':id_departamento' => $id_departamento
+        ':id_departamento' => $id_departamento,
+        ':id_usuario' => $id_usuario
     ]);
     
     echo json_encode([

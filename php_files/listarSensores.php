@@ -13,11 +13,20 @@ try {
     $id_departamento = $_GET['id_departamento'] ?? '';
     
     if (empty($id_departamento)) {
-        // Si no se especifica departamento, listar todos
-        $stmt = $conn->query("SELECT id_sensor, codigo_sensor, tipo, estado, fecha_alta, fecha_baja, id_departamento FROM sensores ORDER BY id_sensor DESC");
+        // Si no se especifica departamento, listar todos con información del usuario
+        $stmt = $conn->query("SELECT s.id_sensor, s.codigo_sensor, s.tipo, s.estado, s.fecha_alta, s.fecha_baja, 
+                              s.id_departamento, s.id_usuario, u.nombre as nombre_usuario 
+                              FROM sensores s 
+                              LEFT JOIN usuarios u ON s.id_usuario = u.id_usuario 
+                              ORDER BY s.id_sensor DESC");
     } else {
-        // Filtrar por departamento
-        $stmt = $conn->prepare("SELECT id_sensor, codigo_sensor, tipo, estado, fecha_alta, fecha_baja, id_departamento FROM sensores WHERE id_departamento = :id_departamento ORDER BY id_sensor DESC");
+        // Filtrar por departamento con información del usuario
+        $stmt = $conn->prepare("SELECT s.id_sensor, s.codigo_sensor, s.tipo, s.estado, s.fecha_alta, s.fecha_baja, 
+                                s.id_departamento, s.id_usuario, u.nombre as nombre_usuario 
+                                FROM sensores s 
+                                LEFT JOIN usuarios u ON s.id_usuario = u.id_usuario 
+                                WHERE s.id_departamento = :id_departamento 
+                                ORDER BY s.id_sensor DESC");
         $stmt->execute([':id_departamento' => $id_departamento]);
     }
     

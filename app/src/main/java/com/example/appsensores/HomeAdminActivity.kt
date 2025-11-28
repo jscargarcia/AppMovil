@@ -156,7 +156,8 @@ class HomeAdminActivity : AppCompatActivity() {
                         val id = sensor.getString("id_sensor")
                         val codigo = sensor.getString("codigo_sensor")
                         val estado = sensor.getString("estado")
-                        listaSensores.add("$id - $codigo ($estado)")
+                        val nombreUsuario = sensor.optString("nombre_usuario", "Sin asignar")
+                        listaSensores.add("$id - $codigo ($estado) - Usuario: $nombreUsuario")
                     }
                     val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaSensores)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

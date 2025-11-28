@@ -45,18 +45,5 @@
             android:layout_weight="1"
             android:text="Editar"/>
 
-        <Button
-            android:id="@+id/btnEliminar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Desactivar"/>
-
-        <Button
-            android:id="@+id/btnActivar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Activar"/>
     </LinearLayout>
 </LinearLayout>

@@ -4,5 +4,6 @@ data class Sensor(
     val id_sensor: String,
     val codigo_sensor: String,
     val estado: String,
-    val tipo: String
+    val tipo: String,
+    val nombre_usuario: String? = null
 )
